@@ -10,13 +10,16 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.idam.githubusers2.adapter.ListUserAdapter
 import com.dicoding.idam.githubusers2.databinding.ActivityMainBinding
+import com.dicoding.idam.githubusers2.viewmodel.DetailViewModel
+import com.dicoding.idam.githubusers2.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ListUserAdapter
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var detailUserViewModel: DetailUserViewModel
+    private lateinit var detailViewModel: DetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         val moveIntent = Intent(this@MainActivity, DetailActivity::class.java)
         moveIntent.putExtra(DetailActivity.EXTRA_USER, data)
         startActivity(moveIntent)
-        detailUserViewModel = DetailUserViewModel()
+        detailViewModel = DetailViewModel()
     }
 
     private fun showLoading(state: Boolean) {
@@ -70,18 +73,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu, menu)
+
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu.findItem(R.id.search).actionView as SearchView
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.queryHint = resources.getString(R.string.search_username)
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                mainViewModel.setUserNames(query)
+                if (query.isEmpty()) {
+                    showLoading(false)
+                } else {
+                    showLoading(true)
+                    mainViewModel.setUserNames(query)
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                if (newText.isEmpty()) {
+                    showLoading(false)
+                } else {
+                    showLoading(true)
+                    mainViewModel.setUserNames(newText)
+                }
                 return false
             }
         })

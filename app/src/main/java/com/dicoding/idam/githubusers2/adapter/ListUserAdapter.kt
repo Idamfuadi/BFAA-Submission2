@@ -1,11 +1,10 @@
-package com.dicoding.idam.githubusers2
+package com.dicoding.idam.githubusers2.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dicoding.idam.githubusers2.GithubUser
 import com.dicoding.idam.githubusers2.databinding.ItemRowUserBinding
 
 class ListUserAdapter : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
@@ -40,7 +39,8 @@ class ListUserAdapter : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
                 Glide.with(itemView.context)
                     .load(githubUser.avatar)
                     .into(ivUserPhoto)
-                tvUsername.text = githubUser.username
+
+                tvUsername.text = githubUser.login
                 itemView.setOnClickListener { onItemClickCallback?.onItemClicked(githubUser) }
             }
 

@@ -1,7 +1,6 @@
-package com.dicoding.idam.githubusers2
+package com.dicoding.idam.githubusers2.fragment
 
 import android.content.Intent
-import android.content.Intent.EXTRA_USER
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.idam.githubusers2.DetailActivity
+import com.dicoding.idam.githubusers2.viewmodel.DetailViewModel
+import com.dicoding.idam.githubusers2.GithubUser
+import com.dicoding.idam.githubusers2.adapter.ListUserAdapter
 import com.dicoding.idam.githubusers2.databinding.FragmentFollowerBinding
 
 class FollowerFragment : Fragment() {
@@ -16,7 +19,7 @@ class FollowerFragment : Fragment() {
 
     private lateinit var binding: FragmentFollowerBinding
     private lateinit var adapter: ListUserAdapter
-    private lateinit var detailUserViewModel: DetailUserViewModel
+    private lateinit var detailViewModel: DetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,13 +49,13 @@ class FollowerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val user = arguments?.getString(ARG_USERNAME)
 
-        detailUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            DetailUserViewModel::class.java)
+        detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            DetailViewModel::class.java)
         if (user != null) {
-            detailUserViewModel.setFollowers(user)
+            detailViewModel.setFollowers(user)
         }
 
-        detailUserViewModel.getFollowers().observe(viewLifecycleOwner) {
+        detailViewModel.getFollowers().observe(viewLifecycleOwner) {
             adapter.setData(it)
 
         }

@@ -1,16 +1,17 @@
-package com.dicoding.idam.githubusers2
+package com.dicoding.idam.githubusers2.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dicoding.idam.githubusers2.GithubUser
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONArray
 import org.json.JSONObject
 
-class DetailUserViewModel : ViewModel() {
+class DetailViewModel : ViewModel() {
     private val detailUser = MutableLiveData<GithubUser>()
     private val listFollowers = MutableLiveData<ArrayList<GithubUser>>()
     private val listFollowing = MutableLiveData<ArrayList<GithubUser>>()

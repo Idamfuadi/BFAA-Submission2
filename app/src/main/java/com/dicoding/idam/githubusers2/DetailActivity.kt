@@ -7,13 +7,15 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.dicoding.idam.githubusers2.adapter.SectionPagerAdapter
 import com.dicoding.idam.githubusers2.databinding.ActivityDetailBinding
+import com.dicoding.idam.githubusers2.viewmodel.DetailViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var detailUserViewModel: DetailUserViewModel
+    private lateinit var detailViewModel: DetailViewModel
 
     companion object {
         @StringRes
@@ -26,30 +28,40 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val actionbar = supportActionBar
+        actionbar!!.title = "User Information"
+        actionbar.setDisplayHomeAsUpEnabled(true)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        detailUserViewModel = DetailUserViewModel()
-        detailUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
+        detailViewModel = DetailViewModel()
+        detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            DetailViewModel::class.java)
         val userData = intent.getParcelableExtra<GithubUser>(EXTRA_USER) as GithubUser
 
-        detailUserViewModel.getDetailUser().observe(this, {
+        detailViewModel.getDetailUser().observe(this, {
+            showLoading(true)
             binding.apply {
                 Glide.with(this@DetailActivity)
                     .load(it.avatar)
-                    .into(userDetailAvatar)
-                tvUsername.text = it.login
-                tvDetailLocation.text = it.location
+                    .into(ivDetailUserPhoto)
+
+                tvDetailLogin.text = it.login
+                tvDetailUsername.text = if (it.username == null) "No Name" else it.username
+                tvDetailLocation.text = if (it.location == null) "No Location" else it.location
+                tvDetailCompany.text = if (it.company == null) "No Company" else it.company
+                tvDetailFollowers.text = if (it.followers == null) "-" else it.followers
+                tvDetailFollowing.text = if (it.following == null) "-" else it.following
             }
             showLoading(false)
         })
+
         initTabLayout(userName = String())
 
         userData.login?.let {
             initTabLayout(it)
-            if (it != null) {
-                detailUserViewModel.setDetailUser(it)
-            }}
+            detailViewModel.setDetailUser(it)
+        }
     }
 
     private fun initTabLayout(userName: String) {
@@ -71,7 +83,12 @@ class DetailActivity : AppCompatActivity() {
         if (state) {
             binding.progressBar.visibility = View.VISIBLE
         } else {
-            binding.progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.INVISIBLE
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
