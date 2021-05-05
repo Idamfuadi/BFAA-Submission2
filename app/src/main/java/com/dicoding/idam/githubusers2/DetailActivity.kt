@@ -29,8 +29,8 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val actionbar = supportActionBar
-        actionbar!!.title = "User Information"
-        actionbar.setDisplayHomeAsUpEnabled(true)
+        actionbar?.title = "User Information"
+        actionbar?.setDisplayHomeAsUpEnabled(true)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
