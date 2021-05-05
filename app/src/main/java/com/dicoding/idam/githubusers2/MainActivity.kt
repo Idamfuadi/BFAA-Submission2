@@ -85,8 +85,8 @@ class MainActivity : AppCompatActivity() {
                 if (query.isEmpty()) {
                     showLoading(false)
                 } else {
-                    showLoading(true)
-                    mainViewModel.setUserNames(query)
+                showLoading(true)
+                mainViewModel.setUserNames(query)
                 }
                 return true
             }
@@ -95,8 +95,8 @@ class MainActivity : AppCompatActivity() {
                 if (newText.isEmpty()) {
                     showLoading(false)
                 } else {
-                    showLoading(true)
-                    mainViewModel.setUserNames(newText)
+                showLoading(true)
+                mainViewModel.setUserNames(newText)
                 }
                 return false
             }

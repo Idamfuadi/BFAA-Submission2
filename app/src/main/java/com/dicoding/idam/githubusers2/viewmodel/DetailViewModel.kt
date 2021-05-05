@@ -1,6 +1,7 @@
 package com.dicoding.idam.githubusers2.viewmodel
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,13 +14,13 @@ import org.json.JSONObject
 
 class DetailViewModel : ViewModel() {
     private val detailUser = MutableLiveData<GithubUser>()
-    private val listFollowers = MutableLiveData<ArrayList<GithubUser>>()
     private val listFollowing = MutableLiveData<ArrayList<GithubUser>>()
+    private val listFollowers = MutableLiveData<ArrayList<GithubUser>>()
 
     fun setDetailUser(users: String) {
         val url = "https://api.github.com/users/$users"
         val asyncClient = AsyncHttpClient()
-        asyncClient.addHeader("Authorization", "token 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")
+        asyncClient.addHeader("Authorization", "token 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")
         asyncClient.addHeader("User-Agent", "request")
         asyncClient.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
@@ -32,8 +33,8 @@ class DetailViewModel : ViewModel() {
                 try {
                     val responObjects = JSONObject(result)
                     val githubUser = GithubUser()
-                    githubUser.login = responObjects.getString("name")
-                    githubUser.username = responObjects.getString("login")
+                    githubUser.login = responObjects.getString("login")
+                    githubUser.username = responObjects.getString("name")
                     githubUser.avatar = responObjects.getString("avatar_url")
                     githubUser.company = responObjects.getString("company")
                     githubUser.location = responObjects.getString("location")
@@ -63,7 +64,7 @@ class DetailViewModel : ViewModel() {
         val listItemFollowers = ArrayList<GithubUser>()
         val url = "https://api.github.com/users/$users/followers"
         val asyncClient = AsyncHttpClient()
-        asyncClient.addHeader("Authorization", "token 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")
+        asyncClient.addHeader("Authorization", "token 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")
         asyncClient.addHeader("User-Agent", "request")
         asyncClient.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray) {
@@ -97,7 +98,7 @@ class DetailViewModel : ViewModel() {
         val listItemFollowing = ArrayList<GithubUser>()
         val url = "https://api.github.com/users/$users/following"
         val asyncClient = AsyncHttpClient()
-        asyncClient.addHeader("Authorization", "token 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")
+        asyncClient.addHeader("Authorization", "token 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")
         asyncClient.addHeader("User-Agent", "request")
         asyncClient.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray) {

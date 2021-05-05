@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.idam.githubusers2.DetailActivity
-import com.dicoding.idam.githubusers2.viewmodel.DetailViewModel
 import com.dicoding.idam.githubusers2.GithubUser
 import com.dicoding.idam.githubusers2.adapter.ListUserAdapter
 import com.dicoding.idam.githubusers2.databinding.FragmentFollowingBinding
+import com.dicoding.idam.githubusers2.viewmodel.DetailViewModel
 
 
 class FollowingFragment : Fragment() {
@@ -35,31 +35,32 @@ class FollowingFragment : Fragment() {
     }
 
     companion object {
-        private val ARG_USERNAME = "username"
+        private val ARG_GITHUB_USERNAME = "username"
 
         @JvmStatic
         fun newInstance(param1: String) =
             FollowingFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_USERNAME, param1)
+                    putString(ARG_GITHUB_USERNAME, param1)
                 }
             }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val user = arguments?.getString(ARG_USERNAME)
+        val user = arguments?.getString(ARG_GITHUB_USERNAME)
 
         detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
             DetailViewModel::class.java)
         if (user != null) {
-            detailViewModel.setFollowers(user)
+            detailViewModel.setFollowing(user)
         }
 
-        detailViewModel.getFollowers().observe(viewLifecycleOwner) {
+        detailViewModel.getFollowing().observe(viewLifecycleOwner) {
             adapter.setData(it)
-
+            showLoading(false)
         }
+
         adapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(data: GithubUser) {
                 val intent = Intent(activity, DetailActivity::class.java)
@@ -67,5 +68,13 @@ class FollowingFragment : Fragment() {
                 startActivity(intent)
             }
         })
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 }
